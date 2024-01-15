@@ -3,35 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Oscillator : MonoBehaviour
-{
-    [SerializeField] private float mag = 4f; // The maximum distance from the starting point
-    [SerializeField] private float speed = 2f; // The speed of the oscillation
-    private float xStart; // The initial x position of the object
-    private bool isMovingRight = true; // Direction flag
+{    
+    private bool directionFlag = true; // Direction flag
+    private float startingPosition; // The initial x position of the object
 
+    [SerializeField] private float mag = 4f; // The maximum distance from the starting point
+    [SerializeField] private float speed = 2f; 
+   
     // Start is called before the first frame update
     void Start()
     {
-        xStart = transform.position.x; // Capture the initial x position
+        startingPosition = transform.position.x;  
+        // Set the starting position to the current x position
     }
 
     // Update is called once per frame
     void Update()
     {
         // Calculate the new x position based on a sine wave
-        float xNew = xStart + mag * Mathf.Sin(Time.time * speed);
+        float rawSinWave = startingPosition + mag * Mathf.Sin(Time.time * speed);
         // Apply the new x position while keeping y and z the same
-        transform.position = new Vector3(xNew, transform.position.y, transform.position.z);
-
+        transform.position = new Vector3(rawSinWave, transform.position.y, transform.position.z);
         // Determine the rotation direction based on the moving direction
-        float rotationDirection = isMovingRight ? 1f : -1f;
+        float rotationDirection = directionFlag? 1f : -1f;
         // Apply rotation around the z-axis
         transform.Rotate(new Vector3(0, 0, rotationDirection * speed * Time.deltaTime));
-    
-        // Check if the object has reached the extent of its magnitude and reverse direction if so
-        if ((isMovingRight && xNew >= xStart + mag) || (!isMovingRight && xNew <= xStart - mag))
+        // If the object has reached the maximum distance from the starting point, change the direction
+        if ((directionFlag && rawSinWave >= startingPosition + mag) || (!directionFlag && rawSinWave <= startingPosition - mag))
         {
-            isMovingRight = !isMovingRight;
+            directionFlag= !directionFlag;
         }
     }
 }
