@@ -24,7 +24,7 @@ public class HideObject : MonoBehaviour
           {
             GetComponent<Renderer>().enabled = !GetComponent<Renderer>().enabled;
 
-            Debug.Log(gameObject.activeSelf);
+            //Debug.Log(gameObject.activeSelf);
          }
     }
 }
